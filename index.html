@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pasteles Andinos Premium</title>
+<link rel="icon" href="IMG/IMG_1182.PNG" type="image/png">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -34,7 +35,12 @@
     <p>
         Realiza tu pedido y recógelo en el horario acordado.
     </p>
+
+    <a class="maps-btn" href="https://www.google.com/maps/place/589+Redwood+Rd,+Bolingbrook,+IL+60440/@41.7028066,-88.0421438,17z/data=!3m1!4b1!4m6!3m5!1s0x880e5b1d13059dc3:0x276e532f136c30ff!8m2!3d41.7028066!4d-88.0395689!16s%2Fg%2F11csp06mk9?entry=ttu&g_ep=EgoyMDI2MDYyMS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
+   Cómo llegar
+</a>
 </section>
+
 
 <section id="menu" class="menu">
 
@@ -42,46 +48,70 @@
 
     <div class="products">
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff">
+        <div class="product">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMtzIogyCoKIWHohACPRYmb-0Uk9FA6RLAlJSCLCR1GRYapv_smAw3dmpZ&s=10">
             <h3>Pastel de Carne</h3>
             <p>Carne sazonada estilo andino.</p>
             <span>$2.00</span>
+            <button onclick="addToCart('Pastel de carne',2)">Agregar
+</button>
         </div>
 
-        <div class="card">
+         <div class="product">
+        <img src="cake1.jpg" alt="">
+        <h3>Pastel de Chocolate</h3>
+        <p>$2.5</p>
+        <button onclick="addToCart('Pastel de Chocolate',35)">
+            Agregar
+        </button>
+    </div>
+
+        <div class="product">
             <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591">
             <h3>Pastel de Pizza</h3>
             <p>Queso mozzarella y salsa.</p>
             <span>$2.50</span>
+              <button onclick="addToCart('Pastel de pizza',35)">
+            Agregar
+        </button>
         </div>
 
-        <div class="card">
+        <div class="product">
             <img src="https://images.unsplash.com/photo-1544025162-d76694265947">
             <h3>Pastel de Pollo</h3>
             <p>Pollo desmechado.</p>
             <span>$2.00</span>
+              <button onclick="addToCart('Pastel de Pollo',35)">
+            Agregar
+        </button>
         </div>
 
-        <div class="card">
+        <div class="product">
             <img src="https://images.unsplash.com/photo-1559847844-5315695dadae">
             <h3>Pastel de Queso</h3>
             <p>Queso fresco.</p>
             <span>$2.00</span>
+              <button onclick="addToCart('Pastel de Queso',35)">
+            Agregar
+        </button>
         </div>
 
-        <div class="card">
+        <div class="product">
             <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38">
             <h3>Pastel Mixto</h3>
             <p>Carne y queso.</p>
             <span>$2.00</span>
+              <button onclick="addToCart('Pastel de Mixto',35)">
+            Agregar
+        </button>
         </div>
 
-        <div class="card">
+        <div class="product">
             <img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f">
             <h3>Pastel Ranchero</h3>
             <p>Carne, queso y vegetales.</p>
             <span>$2.00</span>
+              <button onclick="addToCart('Pastel Ranchero',35)">Agregar</button>
         </div>
 
     </div>
@@ -95,68 +125,64 @@
     <div class="combo-grid">
 
         <div class="combo">
+                        <img src="https://comidasvenezolanas.org/assets/images/pastelitos-andinos_800x534.webp">
+
             <h3>Combo Familiar</h3>
             <p>Pasteles surtidos + Agua Panela con Limón</p>
             <span>$30</span>
+                          <button onclick="addToCart('Combo Familiar',35)">Agregar</button>
+
         </div>
 
         <div class="combo">
+                                    <img src="https://comidasvenezolanas.org/assets/images/pastelitos-andinos_800x534.webp">
+
             <h3>Combo Reunión</h3>
             <p>Ideal para compartir.</p>
             <span>$55</span>
+                          <button onclick="addToCart('Combo Reunion',35)">Agregar</button>
+
         </div>
 
         <div class="combo">
+                                    <img src="https://comidasvenezolanas.org/assets/images/pastelitos-andinos_800x534.webp">
+
             <h3>Combo Fiesta</h3>
             <p>Perfecto para celebraciones.</p>
             <span>$95</span>
+                          <button onclick="addToCart('Combo Fiesta',35)">Agregar</button>
+
         </div>
 
         <div class="combo">
             <h3>Combo Extra</h3>
             <p>Complementos y adicionales.</p>
             <span>Consultar</span>
+                          <button onclick="addToCart('Combo',35)">Agregar</button>
+
         </div>
 
     </div>
 
 </section>
 
-<section class="drink">
 
-    <h2>🥤 Bebida Especial</h2>
 
-    <div class="drink-card">
+<!-- CARRITO ABAJO -->
+<section class="cart">
 
-        <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd">
+  <h2>Tu Pedido</h2>
 
-        <div>
-            <h3>Agua Panela con Limón</h3>
-            <p>
-                Refrescante bebida tradicional preparada al momento.
-            </p>
-        </div>
+  <ul id="cartItems"></ul>
 
-    </div>
+  <h3>Total: $<span id="total">0.00</span></h3>
+
+  <button onclick="sendWhatsApp()">
+    Pedir por WhatsApp
+  </button>
 
 </section>
 
-<section class="cta">
-
-    <h2>Realiza tu Pedido</h2>
-
-    <p>
-        Escríbenos por WhatsApp para reservar tu orden.
-    </p>
-
-    <a
-    class="whatsapp-btn"
-    href="https://wa.me/16308194415"
-    target="_blank">
-        Pedir por WhatsApp
-    </a>
-
-</section>
 
 <footer>
 
@@ -179,6 +205,9 @@
     </p>
 
 </footer>
+
+
+<div id="toast">Agregado ✔</div>
 
 <script src="script.js"></script>
 
