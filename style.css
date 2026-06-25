@@ -136,7 +136,7 @@ header{
 
 .product:nth-child(1) img{
 
-    object-position: 10% 47%; /* X Y */
+    object-position: 10% 80%; /* X Y */
 
 }
 
@@ -201,8 +201,11 @@ object-position: 40% 40%;
 .combo:nth-child(2) img{
 
 object-position: 40% 40%;
+}
 
+.combo:nth-child(3) img{
 
+object-position: 60% 40%;
 }
 
 .combo:hover{
