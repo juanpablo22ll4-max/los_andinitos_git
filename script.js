@@ -144,6 +144,31 @@ function sendWhatsApp(){
         "_blank"
     );
 }
+/* =========================
+
+   MENSAJE DE TEXTO (SMS)
+
+========================= */
+
+function sendSMS(){
+
+    let phone = "+18156931468";
+
+    let message = "Hola, quiero pedir:\n\n";
+
+    cart.forEach(item => {
+        message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
+    });
+
+    let total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+    message += `\nTotal: $${total.toFixed(2)}`;
+
+    window.location.href =
+        `sms:${phone}?body=${encodeURIComponent(message)}`;
+}
+
+
 
 /* =========================
    TOAST

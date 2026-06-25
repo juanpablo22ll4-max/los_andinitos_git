@@ -207,7 +207,7 @@
 
 
 
-<!-- CARRITO ABAJO -->
+<!-- CARRITO -->
 <section class="cart">
 
   <h2>Tu Pedido</h2>
@@ -216,9 +216,26 @@
 
   <h3>Total: $<span id="total">0.00</span></h3>
 
-  <button onclick="sendWhatsApp()">
+  <button class="whatsapp-btn" onclick="sendWhatsApp()">
     Pedir por WhatsApp
   </button>
+
+  <div class="contact-actions">
+
+   <a href="#" onclick="sendSMS()" class="btn sms">
+
+    Pedir por Mensaje
+
+</a>
+
+  
+
+    <a href="tel:+18156931468"
+       class="btn call">
+      Llamar
+    </a>
+
+  </div>
 
 </section>
 
