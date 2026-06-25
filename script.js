@@ -1,66 +1,26 @@
-let cart = [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 /* =========================
-   SCROLL AL MENÚ
+   GUARDAR CARRITO
 ========================= */
-function scrollToMenu() {
-    document.getElementById("menu").scrollIntoView({
-        behavior: "smooth"
-    });
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 /* =========================
-   ANIMACIONES SCROLL
+   AGREGAR AL CARRITO
 ========================= */
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-        }
-    });
-}, {
-    threshold: 0.15
-});
-
-document.querySelectorAll(
-    ".card, .combo, .drink-card, .pickup, .cta"
-).forEach(item => {
-    item.classList.add("hidden");
-    observer.observe(item);
-});
-
-/* =========================
-   WHATSAPP EFFECT
-========================= */
-const whatsappBtn = document.querySelector(".whatsapp-btn");
-
-if (whatsappBtn) {
-    whatsappBtn.addEventListener("mouseenter", () => {
-        whatsappBtn.style.transform = "scale(1.08)";
-    });
-
-    whatsappBtn.addEventListener("mouseleave", () => {
-        whatsappBtn.style.transform = "scale(1)";
-    });
-}
-
-/* =========================
-   AGREGAR AL CARRITO (CORRECTO)
-========================= */
-function addToCart(name, price){
+function addToCart(name, price) {
 
     let item = cart.find(i => i.name === name);
 
-    if(item){
+    if (item) {
         item.qty++;
     } else {
-        cart.push({
-            name: name,
-            price: price,
-            qty: 1
-        });
+        cart.push({ name, price, qty: 1 });
     }
 
+    saveCart();
     updateCart();
     showToast("Agregado ✔");
 }
@@ -68,45 +28,59 @@ function addToCart(name, price){
 /* =========================
    ACTUALIZAR CARRITO
 ========================= */
-function updateCart(){
+function updateCart() {
 
     const list = document.getElementById("cartItems");
-    const totalEl = document.getElementById("total");
+    const totalPriceEl = document.getElementById("totalPrice");
+    const totalItemsEl = document.getElementById("totalItems");
+
+    if (!list || !totalPriceEl || !totalItemsEl) return;
 
     list.innerHTML = "";
 
-    let total = 0;
+    let totalPrice = 0;
+    let totalItems = 0;
 
     cart.forEach((item, index) => {
 
-        total += item.price * item.qty;
+        let subtotal = item.price * item.qty;
+
+        totalPrice += subtotal;
+        totalItems += item.qty;
 
         list.innerHTML += `
-            <li>
-                ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}
+            <li class="cart-item">
+                <span>${item.name}</span>
+                <span>x${item.qty}</span>
+                <span>$${subtotal.toFixed(2)}</span>
 
-                <button onclick="removeOne(${index})">−</button>
-                <button onclick="addOne(${index})">+</button>
-                <button onclick="removeItem(${index})">❌</button>
+                <div class="actions">
+                    <button onclick="removeOne(${index})">−</button>
+                    <button onclick="addOne(${index})">+</button>
+                    <button onclick="removeItem(${index})">❌</button>
+                </div>
             </li>
         `;
     });
 
-    totalEl.textContent = total.toFixed(2);
+    totalPriceEl.textContent = totalPrice.toFixed(2);
+    totalItemsEl.textContent = totalItems;
+
+    saveCart();
 }
 
 /* =========================
-   + Y -
+   + / -
 ========================= */
-function addOne(index){
+function addOne(index) {
     cart[index].qty++;
     updateCart();
 }
 
-function removeOne(index){
+function removeOne(index) {
     cart[index].qty--;
 
-    if(cart[index].qty <= 0){
+    if (cart[index].qty <= 0) {
         cart.splice(index, 1);
     }
 
@@ -114,73 +88,99 @@ function removeOne(index){
 }
 
 /* =========================
-   ELIMINAR COMPLETO
+   ELIMINAR
 ========================= */
-function removeItem(index){
+function removeItem(index) {
     cart.splice(index, 1);
     updateCart();
     showToast("Eliminado ❌");
 }
 
 /* =========================
-   WHATSAPP
+   LIMPIAR CARRITO
 ========================= */
-function sendWhatsApp(){
+function clearCart() {
+    cart = [];
+    updateCart();
+    showToast("Carrito vacío 🧺");
+}
+
+/* =========================
+   TOTAL (FUNCION CENTRAL)
+========================= */
+function getTotal() {
+    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+/* =========================
+   WHATSAPP PRO
+========================= */
+function sendWhatsApp() {
 
     let number = "18156931468";
 
-    let message = "Hola, quiero pedir:%0A%0A";
+    if (cart.length === 0) {
+        showToast("Carrito vacío");
+        return;
+    }
+
+    let message = "🛒 Pedido:%0A%0A";
 
     cart.forEach(item => {
         message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}%0A`;
     });
 
-    let total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    message += `%0A💰 Total: $${getTotal().toFixed(2)}`;
 
-    message += `%0ATotal: $${total.toFixed(2)}`;
-
-    window.open(
-        `https://wa.me/${number}?text=${message}`,
-        "_blank"
-    );
+    window.open(`https://wa.me/${number}?text=${message}`, "_blank");
 }
+
 /* =========================
-
-   MENSAJE DE TEXTO (SMS)
-
+   SMS PRO
 ========================= */
+function sendSMS() {
 
-function sendSMS(){
+    if (cart.length === 0) {
+        showToast("Carrito vacío");
+        return;
+    }
 
     let phone = "+18156931468";
 
-    let message = "Hola, quiero pedir:\n\n";
+    let message = "Pedido:\n\n";
 
     cart.forEach(item => {
         message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
     });
 
-    let total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-
-    message += `\nTotal: $${total.toFixed(2)}`;
+    message += `\nTotal: $${getTotal().toFixed(2)}`;
 
     window.location.href =
         `sms:${phone}?body=${encodeURIComponent(message)}`;
 }
 
-
-
 /* =========================
-   TOAST
+   TOAST PRO
 ========================= */
-function showToast(text){
+function showToast(text) {
 
-    const toast = document.getElementById("toast");
+    let toast = document.getElementById("toast");
+
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast";
+        document.body.appendChild(toast);
+    }
 
     toast.textContent = text;
-    toast.classList.add("show");
+    toast.className = "show";
 
     setTimeout(() => {
-        toast.classList.remove("show");
+        toast.className = "";
     }, 1500);
 }
+
+/* =========================
+   INICIALIZAR
+========================= */
+updateCart();
