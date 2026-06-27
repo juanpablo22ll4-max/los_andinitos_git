@@ -4,7 +4,7 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
    GUARDAR CARRITO
 ========================= */
 function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 /* =========================
@@ -12,179 +12,205 @@ function saveCart() {
 ========================= */
 function addToCart(name, price) {
 
-    let item = cart.find(i => i.name === name);
+  let item = cart.find(i => i.name === name);
 
-    if (item) {
-        item.qty++;
-    } else {
-        cart.push({ name, price, qty: 1 });
-    }
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
 
-    saveCart();
-    updateCart();
-    showToast("Agregado ✔");
+  saveCart();
+  updateCart();
+  showToast("Agregado ✔");
 }
+
+
+/* =========================
+   LIMPIEZA DIARIA
+========================= */
+
+let today = new Date().toDateString();
+let lastVisit = localStorage.getItem("lastVisit");
+
+if (lastVisit !== today) {
+  localStorage.removeItem("cart");
+  localStorage.setItem("lastVisit", today);
+}
+
+/* =========================
+   CARRITO
+========================= */
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 /* =========================
    ACTUALIZAR CARRITO
 ========================= */
 function updateCart() {
 
-    const list = document.getElementById("cartItems");
-    const totalPriceEl = document.getElementById("totalPrice");
-    const totalItemsEl = document.getElementById("totalItems");
+  const list = document.getElementById("cartItems");
+  const totalPriceEl = document.getElementById("totalPrice");
+  const totalItemsEl = document.getElementById("totalItems");
 
-    if (!list || !totalPriceEl || !totalItemsEl) return;
+  if (!list || !totalPriceEl || !totalItemsEl) return;
 
-    list.innerHTML = "";
+  list.innerHTML = "";
 
-    let totalPrice = 0;
-    let totalItems = 0;
+  let totalPrice = 0;
+  let totalItems = 0;
 
-    cart.forEach((item, index) => {
+  cart.forEach((item, index) => {
 
-        let subtotal = item.price * item.qty;
+    let subtotal = item.price * item.qty;
 
-        totalPrice += subtotal;
-        totalItems += item.qty;
+    totalPrice += subtotal;
+    totalItems += item.qty;
 
-        list.innerHTML += `
-            <li class="cart-item">
-                <span>${item.name}</span>
-                <span>x${item.qty}</span>
-                <span>$${subtotal.toFixed(2)}</span>
+    list.innerHTML += `
+      <li class="cart-item">
+        <span>${item.name}</span>
+        <span>x${item.qty}</span>
+        <span>$${subtotal.toFixed(2)}</span>
 
-                <div class="actions">
-                    <button onclick="removeOne(${index})">−</button>
-                    <button onclick="addOne(${index})">+</button>
-                    <button onclick="removeItem(${index})">❌</button>
-                </div>
-            </li>
-        `;
-    });
+        <div class="actions">
+          <button onclick="removeOne(${index})">−</button>
+          <button onclick="addOne(${index})">+</button>
+          <button onclick="removeItem(${index})">❌</button>
+        </div>
+      </li>
+    `;
+  });
 
-    totalPriceEl.textContent = totalPrice.toFixed(2);
-    totalItemsEl.textContent = totalItems;
+  totalPriceEl.textContent = totalPrice.toFixed(2);
+  totalItemsEl.textContent = totalItems;
 
-    saveCart();
+  saveCart();
 }
 
 /* =========================
-   + / -
+   SUMAR / RESTAR
 ========================= */
 function addOne(index) {
-    cart[index].qty++;
-    updateCart();
+  cart[index].qty++;
+  updateCart();
 }
 
 function removeOne(index) {
-    cart[index].qty--;
+  cart[index].qty--;
 
-    if (cart[index].qty <= 0) {
-        cart.splice(index, 1);
-    }
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
 
-    updateCart();
+  updateCart();
 }
 
 /* =========================
-   ELIMINAR
+   ELIMINAR ITEM
 ========================= */
 function removeItem(index) {
-    cart.splice(index, 1);
-    updateCart();
-    showToast("Eliminado ❌");
+  cart.splice(index, 1);
+  updateCart();
+  showToast("Eliminado ❌");
 }
 
 /* =========================
    LIMPIAR CARRITO
 ========================= */
 function clearCart() {
-    cart = [];
-    updateCart();
-    showToast("Carrito vacío 🧺");
+  cart = [];
+  updateCart();
+  showToast("Carrito vacío 🧺");
 }
 
 /* =========================
-   TOTAL (FUNCION CENTRAL)
+   TOTAL
 ========================= */
 function getTotal() {
-    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
 /* =========================
-   WHATSAPP PRO
+   WHATSAPP
 ========================= */
 function sendWhatsApp() {
 
-    let number = "18156931468";
+  let number = "18156931468";
 
-    if (cart.length === 0) {
-        showToast("Carrito vacío");
-        return;
-    }
+  if (cart.length === 0) {
+    showToast("Carrito vacío");
+    return;
+  }
 
-    let message = "🛒 Pedido:%0A%0A";
+  let message = "🛒 PEDIDO CONFIRMADO\n\n";
 
-    cart.forEach(item => {
-        message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}%0A`;
-    });
+  cart.forEach(item => {
+    message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
+  });
 
-    message += `%0A💰 Total: $${getTotal().toFixed(2)}`;
+  message += "\n━━━━━━━━━━━━━━\n";
+  message += "📄 FACTURA\n";
+  message += "━━━━━━━━━━━━━━\n";
 
-    window.open(`https://wa.me/${number}?text=${message}`, "_blank");
+  message += `Subtotal: $${getTotal().toFixed(2)}\n`;
+  message += `Impuestos: $0.00\n`;
+  message += `Descuento: $0.00\n\n`;
+
+  message += `💰 TOTAL FINAL: $${getTotal().toFixed(2)}`;
+
+  let url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+
+  window.open(url, "_blank");
 }
 
 /* =========================
-   SMS PRO
+   SMS
 ========================= */
 function sendSMS() {
 
-    if (cart.length === 0) {
-        showToast("Carrito vacío");
-        return;
-    }
+  if (cart.length === 0) {
+    showToast("Carrito vacío");
+    return;
+  }
 
-    let phone = "+18156931468";
+  let phone = "+18156931468";
 
-    let message = "Pedido:\n\n";
+  let message = "Pedido:\n\n";
 
-    cart.forEach(item => {
-        message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
-    });
+  cart.forEach(item => {
+    message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
+  });
 
-    message += `\nTotal: $${getTotal().toFixed(2)}`;
+  message += `\nTotal: $${getTotal().toFixed(2)}`;
 
-    window.location.href =
-        `sms:${phone}?body=${encodeURIComponent(message)}`;
+  window.location.href = `sms:${phone}?body=${encodeURIComponent(message)}`;
 }
 
 /* =========================
-   TOAST PRO
+   TOAST
 ========================= */
 function showToast(text) {
 
-    let toast = document.getElementById("toast");
+  let toast = document.getElementById("toast");
 
-    if (!toast) {
-        toast = document.createElement("div");
-        toast.id = "toast";
-        document.body.appendChild(toast);
-    }
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    document.body.appendChild(toast);
+  }
 
-    toast.textContent = text;
-    toast.className = "show";
+  toast.textContent = text;
+  toast.className = "show";
 
-    setTimeout(() => {
-        toast.className = "";
-    }, 1500);
+  setTimeout(() => {
+    toast.className = "";
+  }, 1500);
 }
 
 /* =========================
-   INICIALIZAR
+   HOVER EFECTO CARDS
 ========================= */
-updateCart();
-
 document.querySelectorAll('.product').forEach(card => {
 
   card.addEventListener('mousemove', (e) => {
@@ -202,47 +228,47 @@ document.querySelectorAll('.product').forEach(card => {
 
     card.style.transform = `scale(1.03) translate(${moveX}px, ${moveY}px)`;
     card.style.transition = "transform 0.1s ease-out";
-
   });
 
   card.addEventListener('mouseleave', () => {
-    card.style.transform = "scale(1) translate(0,0)";
+    card.style.transform = "scale(1)";
     card.style.transition = "transform 0.4s ease";
   });
-
 });
 
-
+/* =========================
+   COMBO ANDINITO
+========================= */
 function addCombo() {
 
   let carne = parseInt(document.getElementById("carne").value) || 0;
-
   let queso = parseInt(document.getElementById("queso").value) || 0;
-
   let jamon = parseInt(document.getElementById("jamon").value) || 0;
 
   let total = carne + queso + jamon;
 
   if (total !== 10) {
-
     alert("Debes seleccionar exactamente 10 pasteles en total");
-
     return;
-
   }
 
   let descripcion =
+`🍱 Combo Andinito
 
-    `Combo Andinito:\n` +
+━━━━━━━━━━━━━━
 
-    `Carne x${carne}\n` +
+🥩 Carne           : ${carne}
+🧀 Queso           : ${queso}
+🥪 Jamón y Queso   : ${jamon}
 
-    `Queso x${queso}\n` +
-
-    `Jamón con Queso x${jamon}\n` +
-
-    `Total: $25`;
+━━━━━━━━━━━━━━
+Total pasteles : 10
+Precio         : $25`;
 
   addToCart(descripcion, 25);
-
 }
+
+/* =========================
+   INICIAR
+========================= */
+updateCart();
