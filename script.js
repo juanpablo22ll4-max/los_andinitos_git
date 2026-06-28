@@ -1,25 +1,15 @@
-
-
 /* =========================
-   LIMPIEZA DIARIA
+   CARRITO (SE REINICIA AL RECARGAR)
 ========================= */
 
-let today = new Date().toDateString();
-let lastVisit = localStorage.getItem("lastVisit");
-
-if (lastVisit !== today) {
-  localStorage.removeItem("cart");
-  localStorage.setItem("lastVisit", today);
-}
-
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = [];
 
 /* =========================
-   GUARDAR CARRITO
+   GUARDAR CARRITO (opcional)
+   -> se mantiene solo en memoria
 ========================= */
 function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
+  // No se usa localStorage porque quieres reset al recargar
 }
 
 /* =========================
@@ -35,11 +25,9 @@ function addToCart(name, price) {
     cart.push({ name, price, qty: 1 });
   }
 
-  saveCart();
   updateCart();
   showToast("Agregado ✔");
 }
-
 
 /* =========================
    ACTUALIZAR CARRITO
@@ -81,8 +69,6 @@ function updateCart() {
 
   totalPriceEl.textContent = totalPrice.toFixed(2);
   totalItemsEl.textContent = totalItems;
-
-  saveCart();
 }
 
 /* =========================
@@ -140,20 +126,17 @@ function sendWhatsApp() {
     return;
   }
 
-  let message = "🛒 PEDIDO CONFIRMADO\n\n";
+  let message = "🛒 PEDIDO CONFIRMADO\n";
+  message += "━━━━━━━━━━━━━━\n\n";
 
   cart.forEach(item => {
-    message += `• ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}\n`;
+    message += `🍔 Producto: ${item.name}\n`;
+    message += `   Cantidad: ${item.qty}\n`;
+    message += `   Subtotal: $${(item.price * item.qty).toFixed(2)}\n`;
+    message += "────────────────────\n";
   });
 
   message += "\n━━━━━━━━━━━━━━\n";
-  message += "📄 FACTURA\n";
-  message += "━━━━━━━━━━━━━━\n";
-
-  message += `Subtotal: $${getTotal().toFixed(2)}\n`;
-  message += `Impuestos: $0.00\n`;
-  message += `Descuento: $0.00\n\n`;
-
   message += `💰 TOTAL FINAL: $${getTotal().toFixed(2)}`;
 
   let url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
@@ -252,15 +235,12 @@ function addCombo() {
   let descripcion =
 `🍱 Combo Andinito
 
-━━━━━━━━━━━━━━
+🥩 Carne: ${carne}
+🧀 Queso: ${queso}
+🥪 Jamón y Queso: ${jamon}
 
-🥩 Carne           : ${carne}
-🧀 Queso           : ${queso}
-🥪 Jamón y Queso   : ${jamon}
-
-━━━━━━━━━━━━━━
-Total pasteles : 10
-Precio         : $25`;
+Total pasteles: 10
+Precio: $25`;
 
   addToCart(descripcion, 25);
 }
@@ -269,3 +249,12 @@ Precio         : $25`;
    INICIAR
 ========================= */
 updateCart();
+
+
+function scrollToMenu() {
+  const menu = document.getElementById("menu");
+
+  if (menu) {
+    menu.scrollIntoView({ behavior: "smooth" });
+  }
+}
