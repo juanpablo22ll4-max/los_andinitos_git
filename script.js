@@ -1,3 +1,18 @@
+
+
+/* =========================
+   LIMPIEZA DIARIA
+========================= */
+
+let today = new Date().toDateString();
+let lastVisit = localStorage.getItem("lastVisit");
+
+if (lastVisit !== today) {
+  localStorage.removeItem("cart");
+  localStorage.setItem("lastVisit", today);
+}
+
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 /* =========================
@@ -25,24 +40,6 @@ function addToCart(name, price) {
   showToast("Agregado ✔");
 }
 
-
-/* =========================
-   LIMPIEZA DIARIA
-========================= */
-
-let today = new Date().toDateString();
-let lastVisit = localStorage.getItem("lastVisit");
-
-if (lastVisit !== today) {
-  localStorage.removeItem("cart");
-  localStorage.setItem("lastVisit", today);
-}
-
-/* =========================
-   CARRITO
-========================= */
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 /* =========================
    ACTUALIZAR CARRITO
