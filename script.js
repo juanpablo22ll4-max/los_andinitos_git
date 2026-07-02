@@ -258,3 +258,4 @@ function scrollToMenu() {
     menu.scrollIntoView({ behavior: "smooth" });
   }
 }
+

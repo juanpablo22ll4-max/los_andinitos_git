@@ -11,39 +11,78 @@ header{
   padding: 20px;
 }
 
-/* HERO */
 .hero{
   position: relative;
   height: 100vh;
-  background: url("IMG/IMG_1182.PNG");
-  background-size: 100%;
+
+  background: url("https://i.pinimg.com/736x/e4/47/0a/e4470a14be9e773ac27460ba795d3198.jpg");
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+
+  overflow: hidden;
 }
 
+/* overlay oscuro */
+.hero::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+/* contenido */
 .hero-content{
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+
+  color: white;
   max-width: 800px;
   padding: 20px;
-  color: #000;
-  margin-top: 50vh;
+
+  max-width: 700px;
+
+  width: 90%;
+
+
 }
 
+/* imagen encima */
+.hero-top-image{
+  width: 5rem;
+  height: auto;
+  border-radius: 30px;
+    transform: scale(1.1);
+}
+
+/* título */
 .hero h1{
   font-size: 4rem;
-  margin-bottom: 20px;
   font-weight: 700;
+  margin: 0;
+  color: #fff;
 }
 
+/* texto */
 .hero p{
   font-size: 1.2rem;
-  line-height: 1.8;
-  margin-bottom: 30px;
+  line-height: 1.6;
+  margin: 0;
+  color: #fff;
 }
 
+/* botón */
 .hero button{
   padding: 15px 35px;
   border: none;
@@ -52,7 +91,7 @@ header{
   color: white;
   cursor: pointer;
   font-size: 1rem;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .hero button:hover{
@@ -469,6 +508,60 @@ footer p{
   .cta h2{
     font-size: 2rem;
   }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+
+  .hero h1{
+    font-size: 3.5rem;
+  }
+
+  .hero p{
+    font-size: 1.15rem;
+  }
+
+  .hero-top-image{
+    width: 170px;
+    height: 170px;
+  }
+
+}
+
+@media (max-width: 1024px) {
+
+  .hero h1{
+    font-size: 3rem;
+  }
+
+  .hero p{
+    font-size: 1.1rem;
+  }
+
+  .hero-top-image{
+    width: 150px;
+    height: 150px;
+  }
+
+  .hero-content{
+    padding: 15px;
+  }
+}
+
+@media (min-width: 1440px) {
+
+  .hero h1{
+    font-size: 4.5rem;
+  }
+
+  .hero p{
+    font-size: 1.3rem;
+  }
+
+  .hero-top-image{
+    width: 200px;
+    height: 200px;
+  }
+
 }
 
 
